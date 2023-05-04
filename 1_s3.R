@@ -22,21 +22,22 @@ inherits(x, 'fruit') # is x a fruit class object?
 
 fruit <- function(x){
   stopifnot(is.character(x))# checks if x is char
-  structure(list(x), class = 'fruit') 
+  structure(list(fruit_name = x), class = 'fruit') 
 }
 
 
 fruit('pineapple')
 
-# create s3 generics ----
 
+
+
+# create s3 generics ----
 
 # UseMethod
 # 1. create the root 
 quotation <- function(x){
   UseMethod('quotation')
 }
-
 
 
 # 2. create special case (methods)
@@ -53,6 +54,21 @@ quotation(x) # returns quotation.fruit() output
 
 mean.fruit <- function(x){5}
 mean(x) # for fruit class obj, only returns 5
+
+
+
+# looks too long, we modify the output 
+# print.fruit()
+pineapple <- fruit('pineapple') # created by the constructor
+pineapple
+
+# we do not need to define print() as generic, bec it IS already
+# directly define print.fruit
+print.fruit <- function(x){
+  cat('I used constructor for my fruit:', x$fruit_name)
+}
+
+print.fruit(pineapple)
 
 
 
@@ -74,7 +90,7 @@ f.k <- function(x) x+10 # f method for class k
 k <- 1
 f(k) # returns error, class of k does not match!
 
-# can chheck what f(k) tried 
+# can check what f(k) tried 
 # none of these exist 
 sloop::s3_dispatch(f(k))
 
